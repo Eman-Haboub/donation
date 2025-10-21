@@ -30,45 +30,45 @@
 
       <!-- Search Form -->
       <form method="GET" action="{{ route('search') }}">
-        <div class="row mt-4 g-2 justify-content-center">
-          <!-- Region -->
-          <div class="col-6 col-md-2">
-            <select name="region" class="form-select">
-              <option value="">Select Region</option>
-              <option value="Gaza">Gaza</option>
-              <option value="Rafah">Rafah</option>
-              <option value="Khan Younis">Khan Younis</option>
-            </select>
-          </div>
+            <div class="row mt-4 g-2 justify-content-center">
+            <!-- Region -->
+            <div class="col-6 col-md-2">
+                <select name="region" class="form-select">
+                <option value="">Select Region</option>
+                <option value="Gaza">Gaza</option>
+                <option value="Rafah">Rafah</option>
+                <option value="Khan Younis">Khan Younis</option>
+                </select>
+            </div>
 
-          <!-- Family Members -->
-          <div class="col-6 col-md-2">
-            <select name="members_count" class="form-select">
-              <option value="">Family Size</option>
-              <option value="small">1-3</option>
-              <option value="medium">4-6</option>
-              <option value="large">7+</option>
-            </select>
-          </div>
+            <!-- Family Members -->
+            <div class="col-6 col-md-2">
+                <select name="members_count" class="form-select">
+                <option value="">Family Size</option>
+                <option value="small">1-3</option>
+                <option value="medium">4-6</option>
+                <option value="large">7+</option>
+                </select>
+            </div>
 
-          <!-- Need Category -->
-          <div class="col-6 col-md-2">
-            <select name="category" class="form-select">
-              <option value="">Need Category</option>
-              <option value="food">Food</option>
-              <option value="medicine">Medicine</option>
-              <option value="rent">House Rent</option>
-              <option value="education">Education</option>
-            </select>
-          </div>
+            <!-- Need Category -->
+            <div class="col-6 col-md-2">
+                <select name="category" class="form-select">
+                <option value="">Need Category</option>
+                <option value="food">Food</option>
+                <option value="medicine">Medicine</option>
+                <option value="rent">House Rent</option>
+                <option value="education">Education</option>
+                </select>
+            </div>
 
-          <!-- Search Button -->
-          <div class="col-6 col-md-2">
-            <button type="submit" class="btn search-btn w-100 py-2">
-              <i class="bi bi-search me-1"></i> Search
-            </button>
-          </div>
-        </div>
+            <!-- Search Button -->
+            <div class="col-6 col-md-2">
+                <button type="submit" class="btn search-btn w-100 py-2">
+                <i class="bi bi-search me-1"></i> Search
+                </button>
+            </div>
+            </div>
       </form>
 
       <!-- Quick Categories -->

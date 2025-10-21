@@ -32,25 +32,56 @@
                     $user = auth()->user();
                 @endphp
 
-            <a class="btn btn-warning ms-3" href="{{ route('families.create') }}" >
-    {{-- @if(!$user)
-        href="{{ route('login') }}"
-    @elseif($user->hasRole('family'))
-        href="{{ route('family.profile') }}"
-    @elseif($user->hasRole('donor'))
-        href="{{ route('donor.families') }}"
-    @else
-        href="#" onclick="alert('You cannot access this feature.'); return false;"
-    @endif --}}
- Get Accredited
-</a>
 
 
-@if(auth()->check())
-   <a class="btn btn-warning ms-3 d-flex align-items-center" href="{{ route('wallet.index') }}">
-    <i class="fas fa-wallet me-2" style="color: #000;"></i> My Wallet
-</a>
-@endif
+            @if (Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'family'))
+                <a class="btn btn-warning ms-3" href="{{ route('families.create') }}">
+                    Get Accredited
+                </a>
+            @endif
+
+
+
+            @if(auth()->check())
+                <a class="btn btn-warning ms-3 d-flex align-items-center" href="{{ route('wallet.index') }}">
+                    <i class="fas fa-wallet me-2" style="color: #000;"></i> My Wallet
+                </a>
+            @endif
+
+            <!-- Dropdown صورة -->
+            @if (Auth::check() )
+                <div class="dropdown ps-2 pe-2">
+                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ auth()->user()->avatar ?? '/images/default-avatar.png' }}" alt="Avatar" width="40" height="40" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="text-dark text-decoration-none ps-3" href="
+                                @if(auth()->check() && auth()->user()->role === 'family')
+                                    {{ route('families.show', auth()->user()->id) }}
+                                @elseif(auth()->check() && auth()->user()->role === 'donor')
+                                    {{ route('donor.show' , auth()->user()->id) }}
+                                @endif ">
+                                Profile
+                            </a>
+
+
+                        </li>
+
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="dropdown-item"> logout </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            @else
+                <a class="btn btn-warning ms-3" href="{{ route('login') }}">Login</a>
+                <a class="btn btn-warning ms-3" href="{{ route('register') }}">Register</a>
+            @endif
+
+
 
 
                 {{-- <a class="btn btn-warning ms-3" href="{{ route('wallet.index') }}">Open Wallet</a> --}}

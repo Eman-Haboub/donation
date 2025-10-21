@@ -27,7 +27,7 @@ class SearchController extends Controller
 
         if ($request->category) {
             $query->whereHas('needs', function($q) use ($request) {
-                $q->where('category', $request->category);
+                $q->where('type', $request->category);
             });
         }
 

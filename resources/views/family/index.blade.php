@@ -23,9 +23,12 @@
             <h5 class="text-muted">Helping families across Gaza to rebuild their lives</h5>
         </div>
         <div>
-            <a href="{{ route('families.create') }}" class="btn btn-success">
+            @if (Auth::check() && Auth::user()->role === 'admin' ||  Auth::user()->role === 'family')
+               <a href="{{ route('families.create') }}" class="btn btn-success">
                 <i class="fas fa-plus"></i> Add Family
             </a>
+            @endif
+
         </div>
     </div>
 
@@ -80,25 +83,28 @@
                                 </div>
                             @endif
 
-                            <div class="mt-auto d-flex flex-wrap btn-group-custom">
+                            <div class="mt-auto d-flex justify-content-between flex-wrap btn-group-custom">
                                 <a href="{{ route('donations.create', $family->id) }}" class="btn btn-sm btn-warning text-white me-1 mb-1">
                                     <i class="fas fa-hand-holding-heart"></i> Donate
                                 </a>
-                                <a href="{{ route('families.show', $family->id) }}" class="btn btn-sm btn-outline-warning me-1 mb-1">
-                                    Read more
-                                </a>
 
-                                <a href="{{ route('families.edit', $family->id) }}" class="btn btn-sm btn-primary me-1 mb-1">
+                                @if (Auth::check() && Auth::user()->role === 'admin' ||  Auth::user()->role === 'donor')
+                                    <a href="{{ route('families.show', $family->id) }}" class="btn btn-sm btn-outline-warning me-1 mb-1">
+                                        Read more
+                                    </a>
+                                @endif
+
+                                {{-- <a href="{{ route('families.edit', $family->id) }}" class="btn btn-sm btn-primary me-1 mb-1">
                                     <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <form action="{{ route('families.destroy', $family->id) }}" method="POST" class="d-inline mb-1">
+                                </a> --}}
+                                {{-- <form action="{{ route('families.destroy', $family->id) }}" method="POST" class="d-inline mb-1">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger"
                                             onclick="return confirm('Are you sure you want to delete this family?');">
                                         <i class="fas fa-trash-alt"></i> Delete
                                     </button>
-                                </form>
+                                </form> --}}
                             </div>
                         </div>
                     </div>

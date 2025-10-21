@@ -1,4 +1,4 @@
-{{-- <x-guest-layout>
+<x-guest-layout>
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -14,6 +14,17 @@
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div>
+
+         <div class="mt-4">
+            <x-input-label for="role" :value="__('Register as')" />
+           <select name="role" id="role" required
+                class="block w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400">
+                <option value="donor">Donor</option>
+                <option value="family">Family</option>
+            </select>
+            <x-input-error :messages="$errors->get('role')" class="mt-2" />
+
         </div>
 
         <!-- Password -->
@@ -48,75 +59,10 @@
                 {{ __('Register') }}
             </x-primary-button>
         </div>
-        <div class="mb-3">
-    <label for="role" class="form-label">Register as</label>
-    <select name="role" id="role" class="form-control" required>
-        <option value="donor">Donor</option>
-        <option value="family">Family</option>
-    </select>
-</div>
+
 
     </form>
-</x-guest-layout> --}}
-@extends('layouts.app')
+</x-guest-layout>
 
-@section('content')
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-header text-center bg-primary text-white">
-                    <h4>Create an Account</h4>
-                </div>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
 
-                        <!-- Name -->
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input id="name" type="text" class="form-control" name="name" required autofocus>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input id="email" type="email" class="form-control" name="email" required>
-                        </div>
-
-                        <!-- Password -->
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input id="password" type="password" class="form-control" name="password" required>
-                        </div>
-
-                        <!-- Confirm Password -->
-                        <div class="mb-3">
-                            <label for="password_confirmation" class="form-label">Confirm Password</label>
-                            <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" required>
-                        </div>
-
-                        <!-- Role Selection -->
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Register as</label>
-                            <select name="role" id="role" class="form-control" required>
-                                <option value="donor">Donor</option>
-                                <option value="family">Family</option>
-                            </select>
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Register</button>
-                        </div>
-
-                        <div class="mt-3 text-center">
-                            <a href="{{ route('login') }}">Already have an account? Login</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection

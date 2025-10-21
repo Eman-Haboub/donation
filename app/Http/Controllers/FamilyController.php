@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Family;
 use App\Models\Need;
+use App\Models\Family;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FamilyController extends Controller
 {
@@ -23,47 +24,55 @@ class FamilyController extends Controller
      */
     public function create()
     {
+       if(Auth::user()->role !== 'family' && Auth::user()->role !== 'admin'){
+            return redirect()->route('login');
+        }
         return view('family.create');
     }
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'alias'=>'required|string|max:255',
-        'public_region'=>'required|string|max:255',
-        'members_count'=>'required|integer',
-        'information'=>'required|string',
-        'status'=>'required|string',
-        'goal'=>'nullable|numeric',
-        'donated'=>'nullable|numeric',
-        'real_name'=>'required|string|max:255',
-        'address'=>'required|string',
-        'phone'=>'nullable|string',
-        'income'=>'nullable|numeric',
-        'notes'=>'nullable|string',
-        'national_id_encrypted'=>'nullable|string',
-        'img'=>'nullable|image',
-        'kyc_documents.*'=>'nullable|file',
-        'type'=>'required|string',
-        'need_description'=>'required|string',
-    ]);
+    {
+        if(Auth::user()->role !== 'family' && Auth::user()->role !== 'admin') {
+            return redirect()->route('families.index')
+                            ->with('error','You are not authorized to create a family.');
+        }
 
-    if($request->hasFile('img')){
-        $validatedData['img'] = $request->file('img')->store('families','public');
+        $validatedData = $request->validate([
+            'alias'=>'required|string|max:255',
+            'public_region'=>'required|string|max:255',
+            'members_count'=>'required|integer',
+            'information'=>'required|string',
+            'status'=>'required|string',
+            'goal'=>'nullable|numeric',
+            'donated'=>'nullable|numeric',
+            'real_name'=>'required|string|max:255',
+            'address'=>'required|string',
+            'phone'=>'nullable|string',
+            'income'=>'nullable|numeric',
+            'notes'=>'nullable|string',
+            'national_id_encrypted'=>'nullable|string',
+            'img'=>'nullable|image',
+            'kyc_documents.*'=>'nullable|file',
+            'type'=>'required|string',
+            'need_description'=>'required|string',
+        ]);
+
+        if($request->hasFile('img')){
+            $validatedData['img'] = $request->file('img')->store('families','public');
+        }
+
+        $family = Family::create($validatedData);
+
+        \App\Models\Need::create([
+            'family_id' => $family->id,
+            'type' => $request->type,
+            'description' => $request->need_description,
+        ]);
+
+        return redirect()->route('families.index')->with('success','Family and need created successfully!');
     }
-
-    $family = Family::create($validatedData);
-
-    \App\Models\Need::create([
-        'family_id' => $family->id,
-        'type' => $request->type,
-        'description' => $request->need_description,
-    ]);
-
-    return redirect()->route('families.index')->with('success','Family and need created successfully!');
-}
 
 
     /**
@@ -74,21 +83,21 @@ class FamilyController extends Controller
     //     $family = Family::with('needs')->findOrFail($id);
     //     return view('family.show', compact('family'));
     // }
-public function show($id)
-{
-    $family = Family::with('needs')->findOrFail($id);
+    public function show($id)
+    {
+        $family = Family::with('needs')->findOrFail($id);
 
-    // جلب المحفظة الخاصة بالعائلة أو إنشاؤها
-    $wallet = \App\Models\Wallet::firstOrCreate(
-        ['family_id' => $family->id],
-        ['balance' => 0]
-    );
+        // جلب المحفظة الخاصة بالعائلة أو إنشاؤها
+        $wallet = \App\Models\Wallet::firstOrCreate(
+            ['family_id' => $family->id],
+            ['balance' => 0]
+        );
 
-    // جلب آخر العمليات (تبرعات واردة)
-    $transactions = $wallet->transactions()->latest()->get();
+        // جلب آخر العمليات (تبرعات واردة)
+        $transactions = $wallet->transactions()->latest()->get();
 
-    return view('family.show', compact('family', 'wallet', 'transactions'));
-}
+        return view('family.show', compact('family', 'wallet', 'transactions'));
+    }
 
 
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DonorController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomepageController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\DonorController as frontDonorController;
 
 
 
@@ -44,6 +46,7 @@ Route::get('/causes', [PageController::class, 'causes'])->name('causes');
 // ====================
 Route::resource('families', FamilyController::class);
 Route::get('/families/{id}/show', [FamilyController::class, 'show'])->name('families.show');
+Route::get('/donor/{id}/show', [frontDonorController::class, 'show'])->name('donor.show');
 
 // ====================
 // الأخبار (News)
@@ -82,17 +85,20 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
 
+    Route::get('/', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
+
     // إدارة العائلات
-    Route::get('/families', [App\Http\Controllers\Admin\FamilyController::class, 'index'])->name('families.index');
-    Route::get('/families/{family}/edit', [App\Http\Controllers\Admin\FamilyController::class, 'edit'])->name('families.edit');
-    Route::put('/families/{family}', [App\Http\Controllers\Admin\FamilyController::class, 'update'])->name('families.update');
-    Route::delete('/families/{family}', [App\Http\Controllers\Admin\FamilyController::class, 'destroy'])->name('families.destroy');
+    Route::resource('families', App\Http\Controllers\Admin\FamilyController::class);
+    // Route::get('/families/{family}/edit', [App\Http\Controllers\Admin\FamilyController::class, 'edit'])->name('families.edit');
+    // Route::put('/families/{family}', [App\Http\Controllers\Admin\FamilyController::class, 'update'])->name('families.update');
+    // Route::delete('/families/{family}', [App\Http\Controllers\Admin\FamilyController::class, 'destroy'])->name('families.destroy');
 
     // إدارة المتبرعين
-    Route::get('/donors', [App\Http\Controllers\Admin\DonorController::class, 'index'])->name('donors.index');
-    Route::delete('/donors/{donor}', [App\Http\Controllers\Admin\DonorController::class, 'destroy'])->name('donors.destroy');
+    Route::resource('donors', App\Http\Controllers\Admin\DonorController::class);
+
+    // Route::get('/donors', [App\Http\Controllers\Admin\DonorController::class, 'index'])->name('donors.index');
+    // Route::delete('/donors/{donor}', [App\Http\Controllers\Admin\DonorController::class, 'destroy'])->name('donors.destroy');
 });
 
-Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
-});
+// Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
+// });

@@ -31,13 +31,14 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', 'in:donor,family'], // ✅ تحقق من نوع الدور
+            'role' => ['required', 'in:donor,family'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
 
         // Assign role based on selection
@@ -54,7 +55,5 @@ class RegisteredUserController extends Controller
             return redirect()->route('families.create');
         }
 
-        // Fallback
-        return redirect()->route('home');
     }
 }
