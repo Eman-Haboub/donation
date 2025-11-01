@@ -19,39 +19,55 @@
     <div class="alert alert-success">{{ session('success') }}</div>
   @endif
 
-  <form action="{{ isset($family) ? route('families.update', $family->id) : route('families.store') }}" method="POST" enctype="multipart/form-data">
+  @if($errors->any())
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        @foreach($errors->all() as $error)
+          <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+    </div>
+  @endif
+
+  <form action="{{ isset($family) ? route('families.update', $family->id) : route('families.store') }}"
+        method="POST" enctype="multipart/form-data">
     @csrf
     @if(isset($family))
         @method('PUT')
     @endif
 
+    {{-- Public Info --}}
     <h4 class="mb-3">Public Family Information</h4>
     <div class="row g-4 mb-4">
       <div class="col-md-4">
         <label>Alias</label>
-        <input type="text" name="alias" class="form-control" required value="{{ $family->alias ?? '' }}">
+        <input type="text" name="alias" class="form-control"
+               value="{{ old('alias', $family->alias ?? '') }}" required>
       </div>
       <div class="col-md-4">
         <label>Public Region</label>
-        <input type="text" name="public_region" class="form-control" required value="{{ $family->public_region ?? '' }}">
+        <input type="text" name="public_region" class="form-control"
+               value="{{ old('public_region', $family->public_region ?? '') }}" required>
       </div>
       <div class="col-md-4">
         <label>Members Count</label>
-        <input type="number" name="members_count" class="form-control" required value="{{ $family->members_count ?? '' }}">
+        <input type="number" name="members_count" class="form-control"
+               value="{{ old('members_count', $family->members_count ?? '') }}" required>
       </div>
     </div>
 
     <div class="row g-4 mb-4">
       <div class="col-md-6">
         <label>Information</label>
-        <textarea name="information" class="form-control" rows="4" required>{{ $family->information ?? '' }}</textarea>
+        <textarea name="information" class="form-control" rows="4" required>{{ old('information', $family->information ?? '') }}</textarea>
       </div>
       <div class="col-md-6">
         <label>Status</label>
         <select name="status" class="form-select" required>
-          <option value="active" {{ isset($family) && $family->status=='active' ? 'selected' : '' }}>Active</option>
-          <option value="inactive" {{ isset($family) && $family->status=='inactive' ? 'selected' : '' }}>Inactive</option>
-          <option value="suspended" {{ isset($family) && $family->status=='suspended' ? 'selected' : '' }}>Suspended</option>
+          @php $status = old('status', $family->status ?? 'active'); @endphp
+          <option value="active" {{ $status=='active' ? 'selected' : '' }}>Active</option>
+          <option value="inactive" {{ $status=='inactive' ? 'selected' : '' }}>Inactive</option>
+          <option value="suspended" {{ $status=='suspended' ? 'selected' : '' }}>Suspended</option>
         </select>
       </div>
     </div>
@@ -59,11 +75,13 @@
     <div class="row g-4 mb-4">
       <div class="col-md-6">
         <label>Goal</label>
-        <input type="number" name="goal" class="form-control" value="{{ $family->goal ?? 100 }}">
+        <input type="number" name="goal" class="form-control"
+               value="{{ old('goal', $family->goal ?? 100) }}">
       </div>
       <div class="col-md-6">
         <label>Donated</label>
-        <input type="number" name="donated" class="form-control" value="{{ $family->donated ?? 0 }}">
+        <input type="number" name="donated" class="form-control"
+               value="{{ old('donated', $family->donated ?? 0) }}">
       </div>
     </div>
 
@@ -71,41 +89,48 @@
       <label>Upload Family Image</label>
       <input type="file" name="img" class="form-control">
       @if(isset($family) && $family->img)
-        <img src="{{ asset('storage/'.$family->img) }}" alt="" width="100" class="mt-2">
+        <div class="mt-2">
+          <img src="{{ asset('storage/'.$family->img) }}" alt="Family Image" width="120" class="rounded shadow-sm">
+        </div>
       @endif
     </div>
 
+    {{-- Private Info --}}
     <h4 class="mb-3">Private Family Information</h4>
     <div class="row g-4 mb-4">
       <div class="col-md-6">
         <label>Real Name</label>
-        <input type="text" name="real_name" class="form-control" required value="{{ $family->real_name ?? '' }}">
+        <input type="text" name="real_name" class="form-control"
+               value="{{ old('real_name', $family->real_name ?? '') }}" required>
       </div>
       <div class="col-md-6">
         <label>Address</label>
-        <textarea name="address" class="form-control" rows="2" required>{{ $family->address ?? '' }}</textarea>
+        <textarea name="address" class="form-control" rows="2" required>{{ old('address', $family->address ?? '') }}</textarea>
       </div>
     </div>
 
     <div class="row g-4 mb-4">
       <div class="col-md-6">
         <label>Phone</label>
-        <input type="text" name="phone" class="form-control" value="{{ $family->phone ?? '' }}">
+        <input type="text" name="phone" class="form-control"
+               value="{{ old('phone', $family->phone ?? '') }}">
       </div>
       <div class="col-md-6">
         <label>Income</label>
-        <input type="number" step="0.01" name="income" class="form-control" value="{{ $family->income ?? '' }}">
+        <input type="number" step="0.01" name="income" class="form-control"
+               value="{{ old('income', $family->income ?? '') }}">
       </div>
     </div>
 
     <div class="row g-4 mb-4">
       <div class="col-md-6">
         <label>Notes</label>
-        <textarea name="notes" class="form-control" rows="3">{{ $family->notes ?? '' }}</textarea>
+        <textarea name="notes" class="form-control" rows="3">{{ old('notes', $family->notes ?? '') }}</textarea>
       </div>
       <div class="col-md-6">
         <label>National ID (Encrypted)</label>
-        <input type="text" name="national_id_encrypted" class="form-control" value="{{ $family->national_id_encrypted ?? '' }}">
+        <input type="text" name="national_id_encrypted" class="form-control"
+               value="{{ old('national_id_encrypted', $family->national_id_encrypted ?? '') }}">
       </div>
     </div>
 
@@ -115,26 +140,31 @@
     </div>
 
     <hr class="my-5">
+
+    {{-- Family Needs --}}
     <h4 class="mb-3">Family Needs</h4>
 
     <div class="row g-4 mb-4">
       <div class="col-md-6">
         <label>Need Category</label>
         <select name="type" class="form-select" required>
+          @php $type = old('type', $familyNeed->type ?? ''); @endphp
           <option value="">Select Need</option>
-          <option value="food" {{ isset($familyNeed) && $familyNeed->type=='food' ? 'selected' : '' }}>Food</option>
-          <option value="medicine" {{ isset($familyNeed) && $familyNeed->type=='medicine' ? 'selected' : '' }}>Medicine</option>
-          <option value="rent" {{ isset($familyNeed) && $familyNeed->type=='rent' ? 'selected' : '' }}>House Rent</option>
+          <option value="food" {{ $type=='food' ? 'selected' : '' }}>Food</option>
+          <option value="medicine" {{ $type=='medicine' ? 'selected' : '' }}>Medicine</option>
+          <option value="rent" {{ $type=='rent' ? 'selected' : '' }}>House Rent</option>
         </select>
       </div>
       <div class="col-md-6">
         <label>Need Description</label>
-        <textarea name="need_description" class="form-control" rows="3" placeholder="Describe the family's need..." required>{{ $familyNeed->description ?? '' }}</textarea>
+        <textarea name="need_description" class="form-control" rows="3" required>{{ old('need_description', $familyNeed->description ?? '') }}</textarea>
       </div>
     </div>
 
     <div class="mt-4">
-      <button type="submit" class="btn-yellow">{{ isset($family) ? 'Update Family' : 'Save Family' }}</button>
+      <button type="submit" class="btn-yellow w-100 py-2">
+        {{ isset($family) ? 'Update Family' : 'Save Family' }}
+      </button>
     </div>
   </form>
 </div>

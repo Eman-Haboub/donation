@@ -7,6 +7,7 @@ use App\Models\WalletTransaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Family;
 
 class WalletController extends Controller
 {
@@ -68,62 +69,61 @@ class WalletController extends Controller
     /**
      * تنفيذ عملية السحب أو التحويل
      */
- public function withdraw(Request $request)
-{
-    $request->validate([
-        'amount' => 'required|numeric|min:1',
-        'family_id' => 'nullable|integer|exists:families,id',
-    ]);
+    public function withdraw(Request $request)
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'family_id' => 'nullable|integer|exists:families,id',
+        ]);
 
-    $wallet = Wallet::where('user_id', Auth::id())->firstOrFail();
+        $wallet = Wallet::where('user_id', Auth::id())->firstOrFail();
 
-    if ($wallet->balance < $request->amount) {
-        return back()->with('error', 'Insufficient balance!');
-    }
+        if ($wallet->balance < $request->amount) {
+            return back()->with('error', 'Insufficient balance!');
+        }
 
-    // إذا تم تحديد أسرة، فالمعاملة هي تبرع
-    if ($request->family_id) {
-        $familyWallet = Wallet::firstOrCreate(
-            ['user_id' => null, 'id' => null, 'family_id' => $request->family_id],
-            ['balance' => 0]
-        );
 
-        // خصم من محفظة المتبرع
+        // إذا تم تحديد أسرة، فالمعاملة هي تبرع
+        if ($request->family_id) {
+            $familyWallet = Wallet::firstOrCreate(
+                ['user_id' => null, 'id' => null, 'family_id' => $request->family_id],
+                ['balance' => 0]
+            );
+
+            // خصم من محفظة المتبرع
+            $wallet->balance -= $request->amount;
+            $wallet->save();
+
+            // إضافة إلى محفظة الأسرة
+            $familyWallet->balance += $request->amount;
+            $familyWallet->save();
+            Family::where('id', $request->family_id)->increment('donated', $request->amount);
+            // تسجيل العمليات في كل محفظة
+            $wallet->transactions()->create([
+                'type' => 'donation',
+                'amount' => $request->amount,
+                'description' => 'Donation to family ID: ' . $request->family_id,
+            ]);
+
+            $familyWallet->transactions()->create([
+                'type' => 'deposit',
+                'amount' => $request->amount,
+                'description' => 'Received donation from donor ID: ' . Auth::id(),
+            ]);
+
+            return redirect()->route('wallet.index')->with('success', 'Donation sent successfully to family!');
+        }
+
+        // في حال كانت العملية سحب فقط
         $wallet->balance -= $request->amount;
         $wallet->save();
 
-        // إضافة إلى محفظة الأسرة
-        $familyWallet->balance += $request->amount;
-        $familyWallet->save();
-
-        // تسجيل العمليات في كل محفظة
         $wallet->transactions()->create([
-            'type' => 'donation',
+            'type' => 'withdraw',
             'amount' => $request->amount,
-            'description' => 'Donation to family ID: ' . $request->family_id,
+            'description' => 'Balance withdrawal',
         ]);
 
-        $familyWallet->transactions()->create([
-            'type' => 'deposit',
-            'amount' => $request->amount,
-            'description' => 'Received donation from donor ID: ' . Auth::id(),
-        ]);
-
-        return redirect()->route('wallet.index')->with('success', 'Donation sent successfully to family!');
+        return redirect()->route('wallet.index')->with('success', 'Withdrawal completed successfully!');
     }
-
-    // في حال كانت العملية سحب فقط
-    $wallet->balance -= $request->amount;
-    $wallet->save();
-
-    $wallet->transactions()->create([
-        'type' => 'withdraw',
-        'amount' => $request->amount,
-        'description' => 'Balance withdrawal',
-    ]);
-
-    return redirect()->route('wallet.index')->with('success', 'Withdrawal completed successfully!');
-}
-
-
 }

@@ -70,8 +70,12 @@
 
 
 
+                            @if (Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'donor'))
+
                             <a href="{{ route('families.show', $family->id) }}"
                                 class="btn btn-sm btn-outline-warning px-3">Read More</a>
+
+                            @endif
                         </div>
                     </div>
                 </div>

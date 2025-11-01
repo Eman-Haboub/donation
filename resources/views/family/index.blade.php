@@ -23,7 +23,8 @@
             <h5 class="text-muted">Helping families across Gaza to rebuild their lives</h5>
         </div>
         <div>
-            @if (Auth::check() && Auth::user()->role === 'admin' ||  Auth::user()->role === 'family')
+            @if (Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'family'))
+
                <a href="{{ route('families.create') }}" class="btn btn-success">
                 <i class="fas fa-plus"></i> Add Family
             </a>
@@ -88,10 +89,12 @@
                                     <i class="fas fa-hand-holding-heart"></i> Donate
                                 </a>
 
-                                @if (Auth::check() && Auth::user()->role === 'admin' ||  Auth::user()->role === 'donor')
+                                @if (Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'donor'))
+
                                     <a href="{{ route('families.show', $family->id) }}" class="btn btn-sm btn-outline-warning me-1 mb-1">
                                         Read more
                                     </a>
+
                                 @endif
 
                                 {{-- <a href="{{ route('families.edit', $family->id) }}" class="btn btn-sm btn-primary me-1 mb-1">

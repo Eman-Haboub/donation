@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
+      public function index()
+    {
+        $messages = Message::latest()->paginate(10);
+        return view('admin.messages.index', compact('messages'));
+    }
    public function send(Request $request)
 {
     $request->validate([
@@ -33,4 +38,18 @@ class ContactController extends Controller
 
     return back()->with('success', 'Your message has been sent successfully!');
 }
+public function show($id)
+{
+    $message = Message::findOrFail($id);
+    return view('admin.messages.show', compact('message'));
+}
+
+public function destroy($id)
+{
+    $message = Message::findOrFail($id);
+    $message->delete();
+
+    return redirect()->route('messages.index')->with('success', 'Message deleted successfully.');
+}
+
 }

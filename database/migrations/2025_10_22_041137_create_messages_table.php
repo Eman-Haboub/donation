@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('tickets', function (Blueprint $table) {
+        Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
-            $table->enum('role', ['donor', 'family'])->nullable();
+            $table->string('name');
+            $table->string('email');
             $table->string('subject');
-            $table->text('message');
-            $table->enum('status', ['open', 'in_progress', 'closed'])->default('open');
+            $table->longText('message');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tickets');
+        Schema::dropIfExists('messages');
     }
 };

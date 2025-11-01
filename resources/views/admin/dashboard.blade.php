@@ -142,6 +142,61 @@
                 </table>
             </div>
         </div>
+<!-- أحدث الرسائل -->
+<div class="card mt-4">
+    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+        Recent Messages
+        <a class="p-2 text-decoration-none rounded text-dark"
+           href="{{ route('messages.index') }}"
+           style="background-color: #ffc107">
+            All Messages
+        </a>
+    </div>
+
+    <div class="card-body p-0">
+        @if($recentMessages->count() > 0)
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($recentMessages as $msg)
+                    <tr>
+                        <td>{{ $msg->name }}</td>
+                        <td>{{ $msg->email }}</td>
+                        <td>{{ Str::limit($msg->subject, 25) }}</td>
+                        <td>{{ Str::limit($msg->message, 40) }}</td>
+                        <td>{{ $msg->created_at->format('Y-m-d') }}</td>
+                        <td>
+                            <a href="{{ route('messages.show', $msg->id) }}" class="btn btn-sm btn-info">View</a>
+                            <form action="{{ route('messages.destroy', $msg->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    onclick="return confirm('Are you sure you want to delete this message?')"
+                                    class="btn btn-sm btn-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <div class="p-3 text-center text-muted">
+                No messages received yet.
+            </div>
+        @endif
+    </div>
+</div>
 
     </div>
 @endsection

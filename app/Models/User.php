@@ -24,6 +24,10 @@ class User extends Authenticatable
         'password',
         'role'
     ];
+public function families()
+{
+    return $this->hasMany(Family::class);
+}
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,5 +51,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
+public function family()
+{
+    return $this->hasOne(Family::class);
+}
+public function donations() {
+    return $this->hasMany(Donation::class, 'donor_id'); // إذا استخدمنا donor_id
+}
 }

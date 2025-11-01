@@ -76,7 +76,8 @@
                     Quick Donation
                 @endif
             </h4>
-
+            <x-alert name="success" />
+            <x-alert name="error" />
             {{-- بطاقة العائلة (تظهر فقط إذا كانت موجودة أو تم اختيارها لاحقًا) --}}
             <div id="selected-family" class="mb-3" style="display: {{ isset($family) ? 'block' : 'none' }}">
                 @if (isset($family))

@@ -41,10 +41,26 @@
                         <a class="nav-link {{ request()->routeIs('admin.donors.*') ? 'active' : '' }}"
                             href="{{ route('admin.donors.index') }}"> donors </a>
                     </li>
-                    {{-- <li>
+                    <li>
                         <a class="nav-link {{ request()->routeIs('blog') ? 'active' : '' }}"
                             href="{{ route('blog') }}">Blog</a>
-                    </li> --}}
+                    </li>
+                        <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
+                        href="{{ route('home') }}">Home</a>
+                </li>
+                <li>
+                    <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}"
+                        href="{{ route('about') }}">About</a>
+                </li>
+                <li>
+                    <a class="nav-link {{ request()->routeIs('families.index') ? 'active' : '' }}"
+                        href="{{ route('families.index') }}">Our Causes</a>
+                </li>
+                <li>
+                    <a class="nav-link {{ request()->routeIs('blog') ? 'active' : '' }}"
+                        href="{{ route('blog') }}">Blog</a>
+                </li>
                 </ul>
 
                 <div class="d-flex align-items-center">
