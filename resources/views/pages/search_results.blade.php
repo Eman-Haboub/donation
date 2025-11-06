@@ -34,27 +34,6 @@
 
                     <hr>
 
-                    <h5>Private Information</h5>
-                    <ul class="list-unstyled mb-3">
-                        <li><strong>Real Name:</strong> {{ $family->real_name }}</li>
-                        <li><strong>Address:</strong> {{ $family->address }}</li>
-                        <li><strong>Phone:</strong> {{ $family->phone ?? 'N/A' }}</li>
-                        <li><strong>Members:</strong> {{ $family->members_count }}</li>
-                        <li><strong>Monthly Income:</strong> {{ $family->income ? '$'.$family->income : 'N/A' }}</li>
-                        <li><strong>Status:</strong>
-                            @if ($family->status == 'active')
-                                <span class="badge bg-success">Active</span>
-                            @elseif($family->status == 'inactive')
-                                <span class="badge bg-secondary">Inactive</span>
-                            @else
-                                <span class="badge bg-danger">Suspended</span>
-                            @endif
-                        </li>
-                        <li><strong>National ID:</strong> {{ $family->national_id_encrypted ?? 'N/A' }}</li>
-                        <li><strong>Verified:</strong> {{ $family->verified ? 'Yes' : 'No' }}</li>
-                        <li><strong>Notes:</strong> {{ $family->notes ?? 'No notes' }}</li>
-                    </ul>
-
                     <h5>Family Needs</h5>
                     @if($family->needs->isEmpty())
                         <p class="text-muted">This family has not listed any needs yet.</p>
@@ -73,12 +52,15 @@
                                         <p class="small mb-0">{{ $need->description }}</p>
                                     </div>
                                 </div>
+
                             @endforeach
                         </div>
                     @endif
                 </div>
             </div>
         </div>
+                    <a href="{{ route('donations.quick') }}" class="btn btn-outline-warning w-100" style="border-radius: 6px;"> <i class="fas fa-hand-holding-heart"></i>Donate</a>
+
         @endforeach
     @endif
 </div>

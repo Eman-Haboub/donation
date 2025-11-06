@@ -11,13 +11,14 @@
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
                         href="{{ route('home') }}">Home</a>
                 </li>
-                <li>
-                    <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}"
-                        href="{{ route('about') }}">About</a>
-                </li>
+
                 <li>
                     <a class="nav-link {{ request()->routeIs('families.index') ? 'active' : '' }}"
                         href="{{ route('families.index') }}">Our Causes</a>
+                </li>
+                 <li>
+                    <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}"
+                        href="{{ route('about') }}">About</a>
                 </li>
                 <li>
                     <a class="nav-link {{ request()->routeIs('blog') ? 'active' : '' }}"

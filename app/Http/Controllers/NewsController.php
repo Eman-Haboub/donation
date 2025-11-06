@@ -8,10 +8,17 @@ use Illuminate\Http\Request;
 class NewsController extends Controller
 {
     // FRONTEND
+    // FRONTEND
+public function all()
+{
+    $news = News::latest()->paginate(9); // عرض 9 أخبار لكل صفحة
+    return view('admin.news.index', compact('news'));
+}
+
     public function index()
     {
         $news = News::latest()->take(3)->get();
-        return view('home', compact('news'));
+        return view('admin.news.index', compact('news'));
     }
 
     public function show($id)
@@ -19,11 +26,17 @@ class NewsController extends Controller
         $item = News::findOrFail($id);
         return view('news.show', compact('item'));
     }
+// DASHBOARD (CRUD)
+public function adminIndex()
+{
+    $news = News::latest()->paginate(10); // 10 أخبار لكل صفحة
+    return view('Admin.news.index', compact('news'));
+}
 
     // DASHBOARD (CRUD)
     public function create()
     {
-        return view('dashboard.news.create');
+        return view('Admin.news.create');
     }
 
     public function store(Request $request)
@@ -51,7 +64,7 @@ class NewsController extends Controller
     public function edit($id)
     {
         $item = News::findOrFail($id);
-        return view('dashboard.news.edit', compact('item'));
+        return view('Admin.news.edit', compact('item'));
     }
 
     public function update(Request $request, $id)
@@ -75,7 +88,7 @@ class NewsController extends Controller
             'details' => $request->details,
         ]);
 
-        return redirect()->route('home')->with('success', 'News updated successfully!');
+        return redirect()->route('admin.dashboard')->with('success', 'News updated successfully!');
     }
 
     public function destroy($id)
@@ -83,6 +96,6 @@ class NewsController extends Controller
         $item = News::findOrFail($id);
         $item->delete();
 
-        return redirect()->route('home')->with('success', 'News deleted successfully!');
+        return redirect()->route('admin.dashboard')->with('success', 'News deleted successfully!');
     }
 }

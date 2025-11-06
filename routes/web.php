@@ -14,6 +14,7 @@ use App\Http\Controllers\DonorController as FrontDonorController;
 use App\Http\Controllers\Admin\DonorController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\FamilyController as AdminFamilyController;
+use App\Http\Controllers\Admin\NewssController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,16 @@ Route::get('/donor/{id}/show', [FrontDonorController::class, 'show'])->name('don
 // ====================
 Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
 Route::resource('dashboard/news', NewsController::class)->except(['index', 'show']);
+Route::get('/news', [NewsController::class, 'all'])->name('news.index');
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::resource('news', NewsController::class);
+});
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Resource route لأخبار الـ admin
+    Route::resource('news', NewssController::class);
+});
+
 
 // ====================
 // البحث (Search)
@@ -121,3 +132,10 @@ Route::get('/families/alerts', [FamilyAIController::class, 'smartAlerts']);
 Route::get('/admin/ai', [FamilyAIController::class, 'adminAIView']);
 Route::get('/admin/ai', [FamilyAIController::class, 'adminAIView']); // الصفحة
 Route::get('/admin/ai-data', [FamilyAIController::class, 'adminAIData']); // البيانات
+Route::prefix('admin')->name('admin.')->group(function () {
+    // Families CRUD
+    // Route::resource('families', FamilyController::class);
+
+    // News CRUD
+    Route::resource('news', NewsController::class);
+});

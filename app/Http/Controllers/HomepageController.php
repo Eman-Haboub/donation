@@ -10,12 +10,11 @@ class HomepageController extends Controller
     public function index()
     {
         $families = Family::where('status', 'active')
-            ->latest()   // يرتبهم بالأحدث
-            ->take(6)    // ياخد 6 بس
+            ->latest()  
+            ->take(6)
             ->get();
 
         $news = News::latest()->take(3)->get();
-        // إرسالها للواجهة
         return view('pages.home', compact('families','news'));
     }
 }

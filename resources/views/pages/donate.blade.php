@@ -1,5 +1,5 @@
 @extends('layout.app')
-@section('title', content: __('About'))
+@section('title', content: __('Donate'))
   <style>
     body {
       background: #f8fbff;

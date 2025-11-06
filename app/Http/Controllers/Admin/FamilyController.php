@@ -61,13 +61,11 @@ class FamilyController extends Controller
     {
         $family = Family::with('needs')->findOrFail($id);
 
-        // جلب المحفظة الخاصة بالعائلة أو إنشاؤها
         $wallet = \App\Models\Wallet::firstOrCreate(
             ['family_id' => $family->id],
             ['balance' => 0]
         );
 
-        // جلب آخر العمليات (تبرعات واردة)
         $transactions = $wallet->transactions()->latest()->get();
 
         return view('admin.families.show', compact('family', 'wallet', 'transactions'));
@@ -76,10 +74,8 @@ class FamilyController extends Controller
 
     public function edit(string $id)
     {
-        // جلب العائلة مع الحاجة
         $family = Family::with('needs')->findOrFail($id);
 
-        // جلب الحاجة الأولى (إذا كانت موجودة)
         $familyNeed = $family->needs->first();
 
         return view('admin.families.create', compact('family', 'familyNeed'));
@@ -117,7 +113,6 @@ class FamilyController extends Controller
 
         $family->update($validatedData);
 
-        // تحديث الحاجة الخاصة بالعائلة
         $need = $family->needs()->first();
         if($need){
             $need->update([

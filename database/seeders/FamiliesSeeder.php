@@ -11,6 +11,7 @@ class FamiliesSeeder extends Seeder
     {
         DB::table('families')->insert([
             [
+
                 'alias' => 'Family of Abu Ahmed',
                 'public_region' => 'Gaza',
                 'information' => 'This family of 8 lost their house during the recent events and urgently needs support for rent and food.',
@@ -130,6 +131,28 @@ class FamiliesSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+             [
+                'alias' => 'Abu Mohmmed',
+                'public_region' => 'Al-Zawaida',
+                'information' => 'A young man with disability requires a wheelchair and medical equipment to improve his daily life, as his current condition limits his mobility and independence.',
+                'img' => 'storage/home/6m8CBstirhTpGTYBqjTCLvYDRSru3FOvPUOXEkDC.jpg',
+                'members_count' => 12,
+                'status' => 'active',
+                'donated' => 0,
+                'goal' => 80,
+                'real_name' => 'ahmed',
+                'address' => 'Gaza- AL-Samer',
+                'phone' => '0592280338',
+                'income' => 150.00,
+                'notes' => 'plesa donation for me',
+                'national_id_encrypted' => '654987321',
+                'kyc_documents' => json_encode(['kyc_docs/doc5.pdf']),
+                'verified' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+
         ]);
     }
 }

@@ -21,9 +21,10 @@
     </div>
     <div class="text-center mt-4">
         {{-- route('families.index') --}}
-    <a href="#" class="btn btn-warning">
-        View All News
-    </a>
+  <a href="{{ route('news.index') }}" class="btn btn-warning">
+    View All News
+</a>
+
 </div>
 
 </section>

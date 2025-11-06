@@ -9,35 +9,27 @@ use Illuminate\Http\Request;
 class FamilyAIController extends Controller
 
 {
-    // دالة حساب درجات الأولوية
     public function priorityScores()
     {
-        // 1️⃣ جلب كل الأسر من قاعدة البيانات
         $families = Family::all();
 
         foreach ($families as $family) {
-            // 2️⃣ قاعدة أساسية: عدد الأفراد
             $score = $family->members_count;
 
-            // 3️⃣ نسبة الحاجة المتبقية
             $need_ratio = ($family->goal - $family->donated) / $family->goal;
-            $score += $need_ratio * 10; // نضرب لزيادة تأثيرها
+            $score += $need_ratio * 10;
 
-            // 4️⃣ حالة الطوارئ
             if ($family->emergency == 'high') {
                 $score += 5;
             } elseif ($family->emergency == 'medium') {
                 $score += 3;
             }
 
-            // 5️⃣ تخزين درجة الأولوية في متغير جديد
             $family->priority_score = $score;
         }
 
-        // 6️⃣ ترتيب الأسر حسب الأولوية الأعلى أولًا
         $families = $families->sortByDesc('priority_score');
 
-        // 7️⃣ إعادة النتيجة بصيغة JSON لسهولة العرض
         return response()->json($families);
     }
 public function smartAlerts()
@@ -47,7 +39,7 @@ public function smartAlerts()
     $families = Family::all();
 
     foreach ($families as $family) {
-        $needs = $family->needs; // يفترض أن هناك علاقة hasMany في Model Family
+        $needs = $family->needs;
 
         foreach ($needs as $need) {
             $need_percentage = ($need->goal - $need->donated) / $need->goal * 100;
@@ -58,7 +50,6 @@ public function smartAlerts()
         }
     }
 
-    // مثال: عدد الأسر بحاجة طعام أكثر من 2
     $food_needed = Need::where('type', 'food')
                     ->whereRaw('(goal - donated) > ?', [50])
                     ->count();
@@ -73,15 +64,11 @@ public function adminAIView()
 {
     $families = Family::with('needs')->get();
 
-    // 1️⃣ حساب درجات الأولوية لكل أسرة
     foreach ($families as $family) {
         $score = $family->members_count;
 
-        // عدد الاحتياجات غير المكتملة
         $unfulfilled_needs = $family->needs->where('fulfilled', false)->count();
-        $score += $unfulfilled_needs * 5; // كل حاجة غير مكتملة تضيف 5 نقاط
-
-        // حالة الطوارئ
+        $score += $unfulfilled_needs * 5;
         if ($family->emergency == 'high') $score += 5;
         elseif ($family->emergency == 'medium') $score += 3;
 
@@ -90,7 +77,6 @@ public function adminAIView()
 
     $families = $families->sortByDesc('priority_score');
 
-    // 2️⃣ حساب التنبيهات الذكية
     $alerts = [];
     foreach ($families as $family) {
         foreach ($family->needs as $need) {
@@ -100,7 +86,6 @@ public function adminAIView()
         }
     }
 
-    // مثال: إذا أكثر من 2 حاجة طعام غير مكتملة
     $food_needed = Need::where('type', 'food')->where('fulfilled', false)->count();
     if ($food_needed > 2) {
         $alerts[] = "هناك ارتفاع في الحاجة لنوع المساعدات: طعام!";

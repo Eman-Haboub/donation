@@ -21,7 +21,6 @@ class ContactController extends Controller
         'message' => 'required|string|max:1000',
     ]);
 
-    // تخزين الرسالة في قاعدة البيانات
     Message::create([
         'name' => $request->name,
         'email' => $request->email,
@@ -29,7 +28,6 @@ class ContactController extends Controller
         'message' => $request->message,
     ]);
 
-    // (اختياري) إرسال إيميل
     Mail::raw($request->message, function($mail) use ($request) {
         $mail->to('your-email@example.com')
              ->subject($request->subject)

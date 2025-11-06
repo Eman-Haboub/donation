@@ -5,15 +5,18 @@
                 <h6>Quick links</h6>
                 <ul>
                     <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('home') }}"
-                        href="{{ route('home') }}">Home</a>
+                        <a class="nav-link {{ request()->routeIs('home') }}" href="{{ route('home') }}">Home</a>
+                    </li>
+                    <li> <a class="nav-link {{ request()->routeIs('about') }}" href="{{ route('about') }}">About us</a>
+                    </li>
+                    <li><a class="nav-link {{ request()->routeIs('about') }}" href="{{ route('about') }}">Get
+                            Accredited</a></li>
+                      <li>
+                    <a class="nav-link {{ request()->routeIs('families.index') ? 'active' : '' }}"
+                        href="{{ route('families.index') }}">Our Causes</a>
                 </li>
-                <li> <a class="nav-link {{ request()->routeIs('about') }}"
-                        href="{{ route('about') }}">About us</a>
-                </li>
-                    <li>Get Accredited</li>
-                    <li>Our Causes</li>
-                    <li>Gallery</li>
+                    <li><a class="nav-link {{ request()->routeIs('gallery') }}" href="{{ route('gallery') }}">Gallery</a></li>
+
                 </ul>
             </div>
             <div class="col-md-4">

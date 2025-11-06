@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', content: __('Causes'))
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
@@ -25,9 +26,9 @@
         <div>
             @if (Auth::check() && (Auth::user()->role === 'admin' || Auth::user()->role === 'family'))
 
-               <a href="{{ route('families.create') }}" class="btn btn-success">
-                <i class="fas fa-plus"></i> Add Family
-            </a>
+               {{-- <a href="{{ route('families.create') }}" class="btn btn-success"> --}}
+                {{-- <i class="fas fa-plus"></i> Add Family --}}
+            {{-- </a> --}}
             @endif
 
         </div>
@@ -46,7 +47,7 @@
 
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm border-0">
-                        <img src="{{ asset($family->img ? $family->img : 'images/placeholder.jpg') }}"
+                        <img src="{{ asset('storage/' . $family->img ? $family->img : 'images/placeholder.jpg') }}"
                              onerror="this.src='{{ asset('images/placeholder.jpg') }}'"
                              class="card-img-top"
                              alt="{{ $family->alias }}"

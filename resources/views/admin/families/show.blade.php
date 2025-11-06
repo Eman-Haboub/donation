@@ -207,7 +207,13 @@
             </div>
         </div>
     </div>
+
 </div>
+ <form action="{{ route('admin.families.destroy', $family) }}" method="POST" style="display:inline">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                        </form>
 @endsection
 
 @push('scripts')

@@ -44,7 +44,6 @@ class DonorController extends Controller
             'role' => 'donor',
         ]);
 
-        // Assign role based on selection
         $user->assignRole($request->role);
 
 
@@ -61,13 +60,10 @@ class DonorController extends Controller
 
     public function update(Request $request, $id)
 {
-    // إيجاد المستخدم والتأكد أنه من نوع donor
     $donor = User::where('id', $id)->where('role', 'donor')->firstOrFail();
 
-    // دمج الدور (حتى لو لم يُرسل من الفورم)
     $request->merge(['role' => 'donor']);
 
-    // التحقق من البيانات
     $request->validate([
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255',  Rule::unique('users')->ignore($donor->id),],
@@ -75,21 +71,18 @@ class DonorController extends Controller
         'role' => ['required', 'in:donor'],
     ]);
 
-    // تحديث البيانات الأساسية
     $updateData = [
         'name' => $request->name,
         'email' => $request->email,
         'role' => 'donor',
     ];
 
-    // تحديث كلمة المرور فقط إذا تم إدخالها
     if ($request->filled('password')) {
         $updateData['password'] = Hash::make($request->password);
     }
 
     $donor->update($updateData);
 
-    // تحديث الأدوار (في حال استخدمت Spatie Roles)
     $donor->syncRoles([$request->role]);
 
     return redirect()->route('admin.donors.index')->with('success', 'Donor updated successfully!');

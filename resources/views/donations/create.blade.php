@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', content: __('Donate'))
 
 @section('content')
     @push('styles')

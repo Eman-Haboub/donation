@@ -20,7 +20,6 @@ return new class extends Migration
             $table->rememberToken();
             $table->enum('role', ['admin', 'donor', 'family'])->default('family');
             $table->foreignId('family_id')->nullable()->constrained('families')->onDelete('cascade');
-
             $table->timestamps();
         });
 

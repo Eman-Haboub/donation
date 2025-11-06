@@ -15,14 +15,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-       
+
 
         $this->call([
             FamiliesSeeder::class,       // أولًا العائلات
             UsersSeeder::class,          // ثانيًا المستخدمين المرتبطين بالعائلات
             WalletsSeeder::class,        // ثم المحافظ
-            WalletTransactionsSeeder::class, // وأخيرًا سجلات المعاملات
+            // WalletTransactionsSeeder::class,
             RolesAndUsersSeeder::class, // الأدوار والمستخدمين
+            NewsSeeder::class,
 
 
         ]);

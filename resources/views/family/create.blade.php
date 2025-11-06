@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', content: __('Accredited'))
 
 @section('content')
 @push('styles')

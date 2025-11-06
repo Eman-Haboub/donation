@@ -42,7 +42,7 @@
                     <td>{{ $family->members_count }}</td>
                     <td>${{ $family->goal }}</td>
                     <td>
-                        <a href="{{ route('admin.families.edit', $family) }}" class="btn btn-sm btn-primary">Edit</a>
+                        {{-- <a href="{{ route('admin.families.edit', $family) }}" class="btn btn-sm btn-primary">Edit</a> --}}
                         <a href="{{ route('admin.families.show', $family) }}" class="btn btn-sm btn-success">Show</a>
                         <form action="{{ route('admin.families.destroy', $family) }}" method="POST" style="display:inline">
                             @csrf
